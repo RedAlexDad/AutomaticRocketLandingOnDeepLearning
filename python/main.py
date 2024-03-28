@@ -22,7 +22,7 @@ def predict(data):
 # Пример использования
 if __name__ == "__main__":
     model_path = "model.pth"
-    epochs = 10
+    epochs = 20
     train_model(model_path, epochs)
 
     data = [0.5, 0.6, 0.2, 0.8]

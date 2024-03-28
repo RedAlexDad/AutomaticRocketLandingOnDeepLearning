@@ -6,5 +6,5 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$/cpp">
     <contentRoot DIR="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="DL" project-jdk-type="Python SDK" />
 </project>
