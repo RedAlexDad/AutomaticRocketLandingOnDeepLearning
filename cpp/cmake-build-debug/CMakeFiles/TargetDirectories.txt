@@ -1,0 +1,4 @@
+/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir
+/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir
+/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/rebuild_cache.dir
