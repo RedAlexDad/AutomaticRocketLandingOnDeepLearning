@@ -174,9 +174,10 @@ class LunarLander:
             print("Неподдерживаемый формат. Допустимые значения: 'csv', 'excel'")
 
 
+
 if __name__ == "__main__":
     env = gym.make("LunarLander-v2", render_mode="human")
-    lunar_lander = LunarLander(lr=0.00075, discount_factor=0.99, num_actions=4, epsilon=1.0, batch_size=12,
+    lunar_lander = LunarLander(lr=0.00075, discount_factor=0.99, num_actions=4, epsilon=1.0, batch_size=128,
                                input_dim=[8], CUDA_VISIBLE_DEVICES="0")
-    lunar_lander.train_model(env=env, num_episodes=20, metric_avg_score='median', graph=True, table=True)
+    lunar_lander.train_model(env=env, num_episodes=1000, metric_avg_score='median', graph=True, table=True)
     lunar_lander.save_dataframe("dataset", format='excel')

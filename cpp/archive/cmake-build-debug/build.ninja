@@ -49,9 +49,9 @@ cmake_ninja_workdir = /home/redalexdad/Документы/GitHub/AutomaticRocket
 
 build cmake_object_order_depends_target_AutomaticRocketLandingOnDeepLearning: phony || CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir
 
-build CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o: CXX_COMPILER__AutomaticRocketLandingOnDeepLearning_unscanned_Debug /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/LunarLander.cpp || cmake_object_order_depends_target_AutomaticRocketLandingOnDeepLearning
-  DEP_FILE = CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o.d
-  FLAGS = -DENABLE_REDUCE_MEAN_OP -g -std=gnu++2a -fdiagnostics-color=always
+build CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/main.cpp.o: CXX_COMPILER__AutomaticRocketLandingOnDeepLearning_unscanned_Debug /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/main.cpp || cmake_object_order_depends_target_AutomaticRocketLandingOnDeepLearning
+  DEP_FILE = CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/main.cpp.o.d
+  FLAGS = -g -std=gnu++2a -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir
   OBJECT_FILE_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir
 
@@ -63,14 +63,47 @@ build CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o: CXX
 #############################################
 # Link the executable AutomaticRocketLandingOnDeepLearning
 
-build AutomaticRocketLandingOnDeepLearning: CXX_EXECUTABLE_LINKER__AutomaticRocketLandingOnDeepLearning_Debug CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o | /usr/local/lib/libtensorflow.so
-  FLAGS = -DENABLE_REDUCE_MEAN_OP -g
-  LINK_LIBRARIES = -Wl,-rpath,/usr/local/lib  /usr/local/lib/libtensorflow.so
+build AutomaticRocketLandingOnDeepLearning: CXX_EXECUTABLE_LINKER__AutomaticRocketLandingOnDeepLearning_Debug CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/main.cpp.o
+  FLAGS = -g
   OBJECT_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir
   POST_BUILD = :
   PRE_LINK = :
   TARGET_FILE = AutomaticRocketLandingOnDeepLearning
   TARGET_PDB = AutomaticRocketLandingOnDeepLearning.dbg
+
+# =============================================================================
+# Object build statements for SHARED_LIBRARY target AutomaticRocketLandingOnDeepLearningLib
+
+
+#############################################
+# Order-only phony target for AutomaticRocketLandingOnDeepLearningLib
+
+build cmake_object_order_depends_target_AutomaticRocketLandingOnDeepLearningLib: phony || CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir
+
+build CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir/main.cpp.o: CXX_COMPILER__AutomaticRocketLandingOnDeepLearningLib_unscanned_Debug /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/main.cpp || cmake_object_order_depends_target_AutomaticRocketLandingOnDeepLearningLib
+  DEFINES = -DAutomaticRocketLandingOnDeepLearningLib_EXPORTS
+  DEP_FILE = CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir/main.cpp.o.d
+  FLAGS = -g -std=gnu++2a -fPIC -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir
+  OBJECT_FILE_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir
+
+
+# =============================================================================
+# Link build statements for SHARED_LIBRARY target AutomaticRocketLandingOnDeepLearningLib
+
+
+#############################################
+# Link the shared library libAutomaticRocketLandingOnDeepLearning.so
+
+build libAutomaticRocketLandingOnDeepLearning.so: CXX_SHARED_LIBRARY_LINKER__AutomaticRocketLandingOnDeepLearningLib_Debug CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir/main.cpp.o
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  SONAME = libAutomaticRocketLandingOnDeepLearning.so
+  SONAME_FLAG = -Wl,-soname,
+  TARGET_FILE = libAutomaticRocketLandingOnDeepLearning.so
+  TARGET_PDB = AutomaticRocketLandingOnDeepLearning.so.dbg
 
 
 #############################################
@@ -98,6 +131,8 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
+build AutomaticRocketLandingOnDeepLearningLib: phony libAutomaticRocketLandingOnDeepLearning.so
+
 # =============================================================================
 # Folder targets.
 
@@ -106,7 +141,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug
 
-build all: phony AutomaticRocketLandingOnDeepLearning
+build all: phony AutomaticRocketLandingOnDeepLearning libAutomaticRocketLandingOnDeepLearning.so
 
 # =============================================================================
 # Built-in targets
