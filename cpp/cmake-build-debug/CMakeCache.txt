@@ -224,6 +224,12 @@ CMAKE_TAPI:FILEPATH=CMAKE_TAPI-NOTFOUND
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Path to a file.
+OpenCL_INCLUDE_DIR:PATH=/usr/include
+
+//Path to a library.
+OpenCL_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libOpenCL.so
+
 //Value Computed by CMake
 Project_BINARY_DIR:STATIC=/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug
 
@@ -379,6 +385,16 @@ CMAKE_TAPI-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//Details about finding OpenCL
+FIND_PACKAGE_MESSAGE_DETAILS_OpenCL:INTERNAL=[/usr/lib/x86_64-linux-gnu/libOpenCL.so][/usr/include][v2.2()]
+//Have symbol CL_VERSION_2_2
+OPENCL_VERSION_2_2:INTERNAL=1
+//Have symbol CL_VERSION_3_0
+OPENCL_VERSION_3_0:INTERNAL=
+//ADVANCED property for variable: OpenCL_INCLUDE_DIR
+OpenCL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OpenCL_LIBRARY
+OpenCL_LIBRARY-ADVANCED:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 

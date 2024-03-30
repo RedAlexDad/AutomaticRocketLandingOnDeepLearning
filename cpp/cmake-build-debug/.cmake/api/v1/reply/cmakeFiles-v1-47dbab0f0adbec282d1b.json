@@ -125,6 +125,31 @@
 			"isCMake" : true,
 			"isExternal" : true,
 			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindOpenCL.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckSymbolExists.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CMakePushCheckState.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindPackageHandleStandardArgs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindPackageMessage.cmake"
 		}
 	],
 	"kind" : "cmakeFiles",

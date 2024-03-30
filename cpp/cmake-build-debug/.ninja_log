@@ -1,12 +1,11 @@
 # ninja log v5
-1	344	1711785478938773854	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o	54282895844c595d
-344	527	1711785479122779004	AutomaticRocketLandingOnDeepLearning	42901783fafbedbc
-0	20	1711785524124030816	build.ninja	e29b31348baeec29
+1	294	1711786982080783941	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o	f8c3dd03eda0746
+323	501	1711790657390111014	AutomaticRocketLandingOnDeepLearning	379c2528e11e70b8
+0	323	1711790657214107054	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLanderTrain.cpp.o	8e7eafee8165d23e
+1	331	1711787980065564930	CMakeFiles/AutomaticRocketLandingOnDeepLearningLib.dir/LunarLanderTrain.cpp.o	29dc795884109b93
+0	28	1711791932903472013	build.ninja	e29b31348baeec29
+331	401	1711787980133566626	libAutomaticRocketLandingOnDeepLearning.so	8f4c3d86096cde2
+1	857	1711791847137478141	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander_002.cpp.o	3eb6f51b0f306774
 0	309	1711784690243948553	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/driver.cpp.o	e0c7ccd8e65e4db1
-0	22	1711785524124030816	build.ninja	e29b31348baeec29
-1	303	1711785524432039332	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o	f8c3dd03eda0746
-303	474	1711785524600043977	AutomaticRocketLandingOnDeepLearning	8519c684a5f6dfb3
-0	304	1711785531476233926	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o	f8c3dd03eda0746
-304	487	1711785531660239004	AutomaticRocketLandingOnDeepLearning	8519c684a5f6dfb3
-1	299	1711785578717530164	CMakeFiles/AutomaticRocketLandingOnDeepLearning.dir/LunarLander.cpp.o	f8c3dd03eda0746
-299	473	1711785578889534857	AutomaticRocketLandingOnDeepLearning	8519c684a5f6dfb3
+0	146	1711791932903472013	build.ninja	e29b31348baeec29
+1	83	1711791932991474060	AutomaticRocketLandingOnDeepLearning	86118518930ef3f2

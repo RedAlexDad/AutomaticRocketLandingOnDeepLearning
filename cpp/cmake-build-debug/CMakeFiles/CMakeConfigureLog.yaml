@@ -509,3 +509,81 @@ events:
       
       
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckSymbolExists.cmake:140 (try_compile)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindOpenCL.cmake:59 (CHECK_SYMBOL_EXISTS)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindOpenCL.cmake:100 (_FIND_OPENCL_VERSION)"
+      - "CMakeLists.txt:10 (find_package)"
+    checks:
+      - "Looking for CL_VERSION_3_0"
+    directories:
+      source: "/home/redalexdad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb"
+      binary: "/home/redalexdad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "OPENCL_VERSION_3_0"
+      cached: true
+      stdout: |
+        Change Dir: '/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb'
+        
+        Run Build Command(s): /home/redalexdad/Programs/clion-2023.2.2/bin/ninja/linux/x64/ninja -v cmTC_c60fe
+        [1/2] /usr/bin/cc    -o CMakeFiles/cmTC_c60fe.dir/CheckSymbolExists.c.o -c '/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c'
+        \x1b[31mFAILED: \x1b[0mCMakeFiles/cmTC_c60fe.dir/CheckSymbolExists.c.o 
+        /usr/bin/cc    -o CMakeFiles/cmTC_c60fe.dir/CheckSymbolExists.c.o -c '/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c'
+        In file included from /usr/include/CL/cl.h:32,
+                         from /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c:2:
+        /usr/include/CL/cl_version.h:34:9: note: #pragma message: cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 220 (OpenCL 2.2)
+           34 | #pragma message("cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 220 (OpenCL 2.2)")
+              |         ^~~~~~~
+        /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c: In function ‘main’:
+        /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c:8:19: error: ‘CL_VERSION_3_0’ undeclared (first use in this function); did you mean ‘CL_VERSION_1_0’?
+            8 |   return ((int*)(&CL_VERSION_3_0))[argc];
+              |                   ^~~~~~~~~~~~~~
+              |                   CL_VERSION_1_0
+        /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-c1Rfwb/CheckSymbolExists.c:8:19: note: each undeclared identifier is reported only once for each function it appears in
+        ninja: build stopped: subcommand failed.
+        
+      exitCode: 1
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckSymbolExists.cmake:140 (try_compile)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/CheckSymbolExists.cmake:66 (__CHECK_SYMBOL_EXISTS_IMPL)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindOpenCL.cmake:59 (CHECK_SYMBOL_EXISTS)"
+      - "/home/redalexdad/Programs/clion-2023.2.2/bin/cmake/linux/x64/share/cmake-3.27/Modules/FindOpenCL.cmake:100 (_FIND_OPENCL_VERSION)"
+      - "CMakeLists.txt:10 (find_package)"
+    checks:
+      - "Looking for CL_VERSION_2_2"
+    directories:
+      source: "/home/redalexdad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-hUxcAb"
+      binary: "/home/redalexdad/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-hUxcAb"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "OPENCL_VERSION_2_2"
+      cached: true
+      stdout: |
+        Change Dir: '/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-hUxcAb'
+        
+        Run Build Command(s): /home/redalexdad/Programs/clion-2023.2.2/bin/ninja/linux/x64/ninja -v cmTC_e2686
+        [1/2] /usr/bin/cc    -o CMakeFiles/cmTC_e2686.dir/CheckSymbolExists.c.o -c '/home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-hUxcAb/CheckSymbolExists.c'
+        In file included from /usr/include/CL/cl.h:32,
+                         from /home/redalexdad/Документы/GitHub/AutomaticRocketLandingOnDeepLearning/cpp/cmake-build-debug/CMakeFiles/CMakeScratch/TryCompile-hUxcAb/CheckSymbolExists.c:2:
+        /usr/include/CL/cl_version.h:34:9: note: #pragma message: cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 220 (OpenCL 2.2)
+           34 | #pragma message("cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 220 (OpenCL 2.2)")
+              |         ^~~~~~~
+        [2/2] : && /usr/bin/cc   CMakeFiles/cmTC_e2686.dir/CheckSymbolExists.c.o -o cmTC_e2686   && :
+        
+      exitCode: 0
+...
