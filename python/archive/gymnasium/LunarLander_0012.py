@@ -66,12 +66,11 @@ class LunarLander:
         else:
             state = np.array([observation.reshape(1, -1)])
             _, actions = self.q_net(state)
-            action = tf.math.argmax(actions, axis=1).numpy()[0]
-            action = int(action[0])
+            action = tf.math.argmax(actions, axis=1).numpy()[0][0]
 
-        return action  # Возвращаем только одно целое число
+        return action
 
-    def train(self):
+    def train_neural_network(self):
         if self.buffer.counter < self.batch_size:
             return
         if self.step_counter % self.update_rate == 0:
@@ -94,33 +93,34 @@ class LunarLander:
         self.epsilon = self.epsilon - self.epsilon_decay if self.epsilon > self.epsilon_final else self.epsilon_final
         self.step_counter += 1
 
-    def train_model(self, env, num_episodes: int, avg_score_min: float = 200, metric_avg_score: str = 'mean', score_min: float = 250,
+    def train_model(self, env, num_episodes: int, avg_score_min: float = 200, metric_avg_score: str = 'mean',
+                    score_min: float = 250,
                     graph: bool = False, table: bool = False):
         scores, episodes, avg_scores, obj = [], [], [], []
         goal = 200
         f = 0
-        txt = open("saved_networks.txt", "w")
+        txt = open("saved_networks_0002.txt", "w")
 
         for i in range(num_episodes):
             done = False
             score = 0.0
-            state = env.reset()
-            state = np.array(state[0])
+            state = env.reset()[0]
             while not done:
                 action = self.policy(state)
                 new_state, reward, done, info, _ = env.step(action)
                 score += reward
                 self.store_tuple(state, action, reward, new_state, done)
                 state = new_state
-                self.train()
+                self.train_neural_network()
 
             scores.append(score)
             obj.append(goal)
             episodes.append(i)
             # Метрика средней оценки или медианы если metric_avg_score =='median'
-            avg_score = np.mean(scores[-100:]) if metric_avg_score =='mean' else np.median(scores[-100:])
+            avg_score = np.mean(scores[-100:]) if metric_avg_score == 'mean' else np.median(scores[-100:])
             avg_scores.append(avg_score)
-            print(f"Эпизод {i}/{num_episodes}, Оценка: {score} (Эпсилон: {self.epsilon}), {'Средняя оценка' if metric_avg_score == 'mean' else 'Медианная оценка'}: {avg_score}")
+            print(
+                f"Эпизод {i}/{num_episodes}, Оценка: {score} (Эпсилон: {self.epsilon}), {'Средняя оценка' if metric_avg_score == 'mean' else 'Медианная оценка'}: {avg_score}")
 
             # Сохранение модели и ее весов
             if avg_score >= avg_score_min and score >= score_min:
@@ -138,10 +138,42 @@ class LunarLander:
             plt.plot('x', 'Solved Requirement', data=self.df, marker='', color='red', linewidth=2, linestyle='dashed',
                      label='Требование к решению')
             plt.legend()
-            plt.savefig('LunarLander_Train.png')
+            plt.savefig('LunarLander_Train_0002.png')
 
         if table:
             print(tabulate(self.df, headers='keys', tablefmt='grid'))
+
+    def test_model(self, env, num_episodes: int, file_name: str, file_type: str = 'tf', avg_score_min: float = 200,
+                   metric_avg_score: str = 'mean', score_min: float = 250, graph: bool = False, table: bool = False):
+        if file_type == 'tf':
+            self.q_net = tf.keras.models.load_model(file_name)
+        elif file_type == 'h5':
+            self.train_model(env, 5, False)
+            self.q_net.load_weights(file_name)
+
+        self.epsilon = 0.0
+        scores, episodes, avg_scores, obj = [], [], [], []
+        goal = 200
+        score = 0.0
+
+        for i in range(num_episodes):
+            state = env.reset()
+            done = False
+            episode_score = 0.0
+
+            while not done:
+                env.render()
+                action = self.policy(state)
+                new_state, reward, done, _ = env.step(action)
+                episode_score += reward
+                state = new_state
+
+            score += episode_score
+            scores.append(episode_score)
+            obj.append(goal)
+            episodes.append(i)
+            avg_score = np.mean(scores[-100:])
+            avg_scores.append(avg_score)
 
     def save_model_and_weights(self, model_filename, weights_filename):
         """
@@ -174,10 +206,11 @@ class LunarLander:
             print("Неподдерживаемый формат. Допустимые значения: 'csv', 'excel'")
 
 
-
 if __name__ == "__main__":
-    env = gym.make("LunarLander-v2", render_mode="human")
+    env = gym.make("LunarLander-v2", render_mode='rgb_array')
     lunar_lander = LunarLander(lr=0.00075, discount_factor=0.99, num_actions=4, epsilon=1.0, batch_size=128,
                                input_dim=[8], CUDA_VISIBLE_DEVICES="0")
     lunar_lander.train_model(env=env, num_episodes=1000, metric_avg_score='median', graph=True, table=True)
-    lunar_lander.save_dataframe("dataset", format='excel')
+    # lunar_lander.save_dataframe("dataset", format='excel')
+    # lunar_lander.test_model(env=env, num_episodes=10, file_type='h5', file_name='trained_model_tf_hotz.zip', metric_avg_score='median', graph=True, table=True)
+    # lunar_lander.save_dataframe("dataset", format='excel')

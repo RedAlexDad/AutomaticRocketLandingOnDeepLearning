@@ -29,3 +29,6 @@ class ReplayBuffer:
         done_batch = self.terminal_buffer[batch]
 
         return state_batch, action_batch, reward_batch, new_state_batch, done_batch
+
+    def __len__(self):
+        return min(self.counter, self.size)

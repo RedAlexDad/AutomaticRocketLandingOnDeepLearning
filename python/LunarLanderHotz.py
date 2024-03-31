@@ -1,3 +1,4 @@
+import os
 import random
 import gymnasium as gym
 import numpy as np
@@ -44,12 +45,16 @@ if __name__ == "__main__":
     env = gym.make('LunarLander-v2', render_mode="rgb_array")
 
     model = A2C("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=50000)
-    model.save("trained_model_tf")
+
+    if os.path.exists("trained_model_tf_hotz.zip"):
+        model.load("trained_model_tf_hotz")
+    else:
+        model.learn(total_timesteps=50000)
+        model.save("trained_model_tf_hotz")
 
     vec_env = model.get_env()
 
-    for i in range(10):
+    for i in range(100):
         print(f"*** playing game {i}")
         done = False
         obs = vec_env.reset()

@@ -192,7 +192,7 @@ class LunarLander:
             plt.plot('x', 'Solved Requirement', data=self.df, marker='', color='red', linewidth=2, linestyle='dashed',
                      label='Требование к решению')
             plt.legend()
-            plt.savefig('LunarLander_Train.png')
+            plt.savefig('LunarLander_Train_0002.png')
 
         if table:
             print(tabulate(self.df, headers='keys', tablefmt='grid'))

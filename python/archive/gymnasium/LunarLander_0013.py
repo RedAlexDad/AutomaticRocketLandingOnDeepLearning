@@ -1,4 +1,6 @@
 import os
+import sys
+
 import gym
 import numpy as np
 import pandas as pd
@@ -11,24 +13,7 @@ from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 
-
-class DuelingDoubleDeepQNetwork(tf.keras.Model):
-    def __init__(self, num_actions: int, fc1: int, fc2: int):
-        super(DuelingDoubleDeepQNetwork, self).__init__()
-        self.dense1 = Dense(fc1, activation='relu')
-        self.dense2 = Dense(fc2, activation='relu')
-        self.V = Dense(1, activation=None)
-        self.A = Dense(num_actions, activation=None)
-
-    def call(self, state):
-        x = self.dense1(state)
-        x = self.dense2(x)
-        V = self.V(x)
-        A = self.A(x)
-        avg_A = tf.math.reduce_mean(A, axis=1, keepdims=True)
-        Q = (V + (A - avg_A))
-
-        return Q, A
+from stable_baselines3 import A2C
 
 
 class LunarLander:
@@ -44,6 +29,7 @@ class LunarLander:
         self.discount_factor = discount_factor
         self.epsilon = epsilon
         self.batch_size = batch_size
+        self.lr = lr
         self.epsilon_decay = 0.001
         self.epsilon_final = 0.01
         self.update_rate = 120
@@ -51,67 +37,122 @@ class LunarLander:
 
         self.buffer = ReplayBuffer(100000, input_dim)
 
-        self.q_net = DuelingDoubleDeepQNetwork(num_actions, 128, 128)
-        self.q_target_net = DuelingDoubleDeepQNetwork(num_actions, 128, 128)
-        self.q_net.compile(optimizer=Adam(learning_rate=lr), loss='mse')
-        self.q_target_net.compile(optimizer=Adam(learning_rate=lr), loss='mse')
+        # Создание модели нейронной сети
+        self.model = self.build_model(input_dim, num_actions)
 
     def store_tuple(self, state: np.ndarray, action: int, reward: float, new_state: np.ndarray, done: bool):
         state = np.array(state[0])
         self.buffer.store_tuples(state, action, reward, new_state, done)
 
-    def policy(self, observation: np.array):
-        if np.random.random() < self.epsilon:
-            action = np.random.choice(self.action_space)
+    def build_model(self, input_dim, num_actions):
+        model = tf.keras.models.Sequential([
+            tf.keras.layers.Dense(256, activation='relu', input_shape=input_dim),
+            tf.keras.layers.Dense(256, activation='tanh'),
+            tf.keras.layers.Dense(256, activation='sigmoid'),
+            tf.keras.layers.Dense(num_actions, activation='linear')
+        ])
+        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=self.lr), loss='mse')
+        return model
+
+    def choose_action(self, state):
+        # Реализация выбора действия с учетом epsilon-greedy стратегии
+        if np.random.rand() <= self.epsilon:
+            return np.random.choice(self.action_space)
         else:
-            state = np.array([observation.reshape(1, -1)])
-            _, actions = self.q_net(state)
-            action = tf.math.argmax(actions, axis=1).numpy()[0][0]
+            q_values = self.model.predict(state[np.newaxis, :], verbose=0)
+            return np.argmax(q_values)
+    def update_model(self):
+        # Обновление модели с использованием мини-батчей из буфера воспроизведения
+        batch = self.buffer.sample_buffer(self.batch_size)
+        states, actions, rewards, next_states, dones = batch
 
-        return action
+        q_values_next = self.model.predict(next_states, verbose=0)
+        max_q_values_next = np.max(q_values_next, axis=1)
 
-    def train_neural_network(self):
-        if self.buffer.counter < self.batch_size:
-            return
-        if self.step_counter % self.update_rate == 0:
-            self.q_target_net.set_weights(self.q_net.get_weights())
+        q_values = self.model.predict(states, verbose=0)
+        q_values[np.arange(len(actions)), actions] = rewards + (1 - dones) * self.discount_factor * max_q_values_next
 
-        state_batch, action_batch, reward_batch, new_state_batch, done_batch = \
-            self.buffer.sample_buffer(self.batch_size)
+        self.model.fit(states, q_values, verbose=0)
 
-        q_predicted, _ = self.q_net(state_batch)
-        q_next, _ = self.q_target_net(new_state_batch)
-        q_target = q_predicted.numpy()
-        _, actions = self.q_net(new_state_batch)
-        max_actions = tf.math.argmax(actions, axis=1)
+    def train_model(self, env, num_episodes: int, save_path: str = 'trained_model_tf') -> None:
+        os.system('cls' if os.name == 'nt' else 'clear')  # Очищаем консоль
+        score = 0.0
 
-        for idx in range(done_batch.shape[0]):
-            q_target[idx, action_batch[idx]] = \
-                (reward_batch[idx] + self.discount_factor * q_next[idx, max_actions[idx]] * (1 - int(done_batch[idx])))
+        for _ in range(num_episodes):
+            done = False
+            obs = env.reset()
+            total_reward = 0.0
 
-        self.q_net.train_on_batch(state_batch, q_target)
-        self.epsilon = self.epsilon - self.epsilon_decay if self.epsilon > self.epsilon_final else self.epsilon_final
-        self.step_counter += 1
+            print('Эпизод:', num_episodes)
+            while not done:
+                action = self.choose_action(obs)
+                next_obs, reward, done, info, _ = env.step(action)
+                self.store_tuple(obs, action, reward, next_obs, done)
+                obs = next_obs
+                total_reward += reward
 
-    def train_model(self, env, num_episodes: int, avg_score_min: float = 200, metric_avg_score: str = 'mean',
+                # Перезаписываем предыдущий вывод
+                print('')
+                print('\033[F', end='')  # Сдвигаем курсор на одну строку вверх
+                print('total_reward:', round(total_reward, 2), 'action:', action, 'reward:', round(reward, 2), 'done:', done)
+                # print('obs:', obs, 'next_obs:', next_obs, 'info:', info)
+
+                if len(self.buffer) > self.batch_size:
+                    self.update_model()
+
+            score += total_reward # Обновляем счет
+
+        # Сохранение модели после завершения обучения
+        self.model.save(save_path)
+
+    def test_model(self, env, num_episodes: int, save_path: str) -> None:
+        if not os.path.exists(f'{save_path}') and save_path != '':
+            self.model.load(save_path)
+            env = self.model.get_env()
+
+        for episode in range(num_episodes):
+            total_reward = 0
+            obs = env.reset()
+            done = False
+
+            while not done:
+                action = self.choose_action(obs)
+                obs, reward, done, info, _ = env.step(action)
+                total_reward += reward
+                env.render()
+
+            print(f"Эпизод {episode + 1}: награда = {total_reward}")
+
+        env.close()
+
+    def train_model_neural_network(self, env, num_episodes: int, avg_score_min: float = 200, metric_avg_score: str = 'mean',
                     score_min: float = 250,
                     graph: bool = False, table: bool = False):
+        os.system('cls' if os.name == 'nt' else 'clear')  # Очищаем консоль
+
         scores, episodes, avg_scores, obj = [], [], [], []
         goal = 200
         f = 0
-        txt = open("saved_networks.txt", "w")
+        txt = open("saved_networks_0002.txt", "w")
 
         for i in range(num_episodes):
             done = False
             score = 0.0
-            state = env.reset()[0]
+            obs = env.reset()
             while not done:
-                action = self.policy(state)
-                new_state, reward, done, info, _ = env.step(action)
+                action = self.choose_action(obs)
+                next_obs, reward, done, info, _ = env.step(action)
+                self.store_tuple(obs, action, reward, next_obs, done)
                 score += reward
-                self.store_tuple(state, action, reward, new_state, done)
-                state = new_state
-                self.train_neural_network()
+                obs = next_obs
+
+                # Перезаписываем предыдущий вывод
+                print('\033[F', end='')  # Сдвигаем курсор на одну строку вверх
+                print('score:', round(score, 2), 'action:', action, 'reward:', round(reward, 2), 'done:', done)
+                # print('obs:', obs, 'next_obs:', next_obs, 'info:', info)
+
+                if len(self.buffer) > self.batch_size:
+                    self.update_model()
 
             scores.append(score)
             obj.append(goal)
@@ -121,6 +162,8 @@ class LunarLander:
             avg_scores.append(avg_score)
             print(
                 f"Эпизод {i}/{num_episodes}, Оценка: {score} (Эпсилон: {self.epsilon}), {'Средняя оценка' if metric_avg_score == 'mean' else 'Медианная оценка'}: {avg_score}")
+            txt.write(
+                f"Эпизод {i}/{num_episodes}, Оценка: {score} (Эпсилон: {self.epsilon}), {'Средняя оценка' if metric_avg_score == 'mean' else 'Медианная оценка'}: {avg_score}\n")
 
             # Сохранение модели и ее весов
             if avg_score >= avg_score_min and score >= score_min:
@@ -143,37 +186,38 @@ class LunarLander:
         if table:
             print(tabulate(self.df, headers='keys', tablefmt='grid'))
 
-    def test_model(self, env, num_episodes: int, file_name: str, file_type: str = 'tf', avg_score_min: float = 200,
+    def test_model_neural_network(self, env, num_episodes: int, file_name: str, file_type: str = 'tf', avg_score_min: float = 200,
                    metric_avg_score: str = 'mean', score_min: float = 250, graph: bool = False, table: bool = False):
-        if file_type == 'tf':
-            self.q_net = tf.keras.models.load_model(file_name)
-        elif file_type == 'h5':
-            self.train_model(env, 5, False)
-            self.q_net.load_weights(file_name)
+        if not os.path.exists(f'{file_name}') and file_name != '':
+            self.model.load(file_name)
 
         self.epsilon = 0.0
         scores, episodes, avg_scores, obj = [], [], [], []
         goal = 200
         score = 0.0
 
-        for i in range(num_episodes):
-            state = env.reset()
+        for episode in range(num_episodes):
+            obs = env.reset()
             done = False
             episode_score = 0.0
 
             while not done:
                 env.render()
-                action = self.policy(state)
-                new_state, reward, done, _ = env.step(action)
+                action = self.choose_action(obs)
+                new_obs, reward, done, info, _ = env.step(action)
                 episode_score += reward
-                state = new_state
+                obs = new_obs
 
             score += episode_score
             scores.append(episode_score)
             obj.append(goal)
-            episodes.append(i)
+            episodes.append(episode)
             avg_score = np.mean(scores[-100:])
             avg_scores.append(avg_score)
+
+            print(f"Эпизод {episode + 1}: награда = {episode_score}")
+
+        env.close()
 
     def save_model_and_weights(self, model_filename, weights_filename):
         """
@@ -210,7 +254,12 @@ if __name__ == "__main__":
     env = gym.make("LunarLander-v2", render_mode='rgb_array')
     lunar_lander = LunarLander(lr=0.00075, discount_factor=0.99, num_actions=4, epsilon=1.0, batch_size=128,
                                input_dim=[8], CUDA_VISIBLE_DEVICES="0")
-    lunar_lander.train_model(env=env, num_episodes=1000, metric_avg_score='median', graph=True, table=True)
-    # lunar_lander.save_dataframe("dataset", format='excel')
-    # lunar_lander.test_model(env=env, num_episodes=10, file_type='h5', file_name='trained_model_tf_hotz.zip', metric_avg_score='median', graph=True, table=True)
+    lunar_lander.train_model_neural_network(env=env, num_episodes=100, metric_avg_score='median', graph=True, table=True)
+    # lunar_lander.train_model(env=env, num_episodes=50)
+
+    env = gym.make("LunarLander-v2", render_mode='human')
+    # lunar_lander.test_model(env=env, num_episodes=50, save_path='trained_model_tf')
+
+    lunar_lander.save_dataframe("dataset_0003", format='excel')
+    lunar_lander.test_model_neural_network(env=env, num_episodes=10, file_type='h5', file_name='trained_model_tf_hotz.zip', metric_avg_score='median', graph=True, table=True)
     # lunar_lander.save_dataframe("dataset", format='excel')
